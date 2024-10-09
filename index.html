@@ -3,42 +3,45 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Theory and Reality of Money</title>
+    <title>Money Management Tool</title>
     <link rel="stylesheet" href="styles.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> <!-- Link for graphing -->
 </head>
 <body>
-    <h1>Theory and Reality of Money</h1>
+    <h1>Money Management Tool</h1>
 
-    <!-- Input Section -->
-    <section id="input-section">
-        <h2>Input Data</h2>
-        <label for="money-earned">Money Earned:</label>
-        <input type="number" id="money-earned" placeholder="Enter your total earnings">
+    <!-- Inputs Section -->
+    <section id="inputs-section">
+        <h2>Inputs</h2>
+        <label for="income-earned">Enter Income Earned:</label>
+        <input type="number" id="income-earned" placeholder="Enter income">
 
-        <label for="money-spent">Money Spent:</label>
-        <input type="number" id="money-spent" placeholder="Enter your total spending">
+        <label for="money-spent">Enter Amount of Money Spent:</label>
+        <input type="number" id="money-spent" placeholder="Enter amount spent">
 
-        <button onclick="calculateMoney()">Calculate</button>
+        <label for="saving-percentage">Enter Percentage of Money Trying to Save:</label>
+        <input type="number" id="saving-percentage" placeholder="Enter saving percentage">
+
+        <button onclick="calculateFinances()">Calculate</button>
     </section>
 
-    <!-- Output Section -->
-    <section id="output-section">
-        <h2>Results</h2>
-        <p>Theory Money to Save: <span id="theory-save"></span></p>
-        <p>Theory Money to Spend: <span id="theory-spend"></span></p>
-        <p>Actual Money Saved: <span id="actual-save"></span></p>
-        <p>Actual Money Spent: <span id="actual-spend"></span></p>
-        <p>Progress in Spendage: <span id="progress-spend"></span></p>
+    <!-- Outputs Section -->
+    <section id="outputs-section">
+        <h2>Outputs</h2>
+        <p>Amount Supposed to Save: <span id="supposed-save"></span></p>
+        <p>Amount Supposed to Spend: <span id="supposed-spend"></span></p>
+        <p>Amount of Money Saved: <span id="money-saved"></span></p>
+        <p>Progress of Money: <span id="progress-spent"></span></p>
     </section>
 
-    <!-- Graph Section -->
-    <section id="graph-section">
-        <h2>Progress in Spendage</h2>
+    <!-- Progress Section -->
+    <section id="progress-side">
+        <h2>Progress Charts</h2>
         <canvas id="spend-progress-chart" width="400" height="200"></canvas>
+        <canvas id="save-progress-chart" width="400" height="200"></canvas>
     </section>
 
-    <!-- Save and Load Section -->
+    <!-- Save Data Section -->
     <section id="save-section">
         <h2>Save Data</h2>
         <button onclick="saveData()">Save Data</button>

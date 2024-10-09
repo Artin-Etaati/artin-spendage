@@ -1,61 +1,59 @@
-let theorySpend = 0;
-let theorySave = 0;
-let actualSave = 0;
-let actualSpend = 0;
+let supposedSave = 0;
+let supposedSpend = 0;
+let moneySaved = 0;
+let progressSpent = 0;
 let savedData = {};
 
-// Calculate Theory and Actual Spend/Save
-function calculateMoney() {
-    let moneyEarned = parseFloat(document.getElementById("money-earned").value);
+// Calculate the finances based on inputs
+function calculateFinances() {
+    let incomeEarned = parseFloat(document.getElementById("income-earned").value);
     let moneySpent = parseFloat(document.getElementById("money-spent").value);
+    let savingPercentage = parseFloat(document.getElementById("saving-percentage").value);
 
-    if (!moneyEarned || !moneySpent) {
-        alert("Please enter valid amounts for both earned and spent money.");
-        return;
+    if (incomeEarned && moneySpent && savingPercentage) {
+        supposedSave = (savingPercentage / 100) * incomeEarned;
+        supposedSpend = incomeEarned - supposedSave;
+        moneySaved = incomeEarned - moneySpent;
+        progressSpent = supposedSpend - moneySpent;
+
+        document.getElementById("supposed-save").innerText = `$${supposedSave.toFixed(2)}`;
+        document.getElementById("supposed-spend").innerText = `$${supposedSpend.toFixed(2)}`;
+        document.getElementById("money-saved").innerText = `$${moneySaved.toFixed(2)}`;
+        document.getElementById("progress-spent").innerText = `$${progressSpent.toFixed(2)}`;
+
+        displayCharts();
+    } else {
+        alert("Please enter all the inputs.");
     }
-
-    // Calculate theory (60% spend, 40% save)
-    theorySpend = moneyEarned * 0.6;
-    theorySave = moneyEarned * 0.4;
-
-    // Actual amounts
-    actualSpend = moneySpent;
-    actualSave = moneyEarned - moneySpent;
-
-    // Progress
-    let progressSpend = theorySpend - actualSpend;
-
-    // Update output
-    document.getElementById("theory-save").innerText = `$${theorySave.toFixed(2)}`;
-    document.getElementById("theory-spend").innerText = `$${theorySpend.toFixed(2)}`;
-    document.getElementById("actual-save").innerText = `$${actualSave.toFixed(2)}`;
-    document.getElementById("actual-spend").innerText = `$${actualSpend.toFixed(2)}`;
-    document.getElementById("progress-spend").innerText = `$${progressSpend.toFixed(2)}`;
-
-    // Update chart
-    updateSpendageChart(theorySpend, actualSpend, progressSpend);
 }
 
-// Create Spendage Progress Chart
-function updateSpendageChart(theorySpend, actualSpend, progressSpend) {
-    let ctx = document.getElementById('spend-progress-chart').getContext('2d');
-    new Chart(ctx, {
+// Display charts for spend progress and save progress
+function displayCharts() {
+    // Spend Progress Chart
+    let spendChart = document.getElementById('spend-progress-chart').getContext('2d');
+    new Chart(spendChart, {
         type: 'bar',
         data: {
-            labels: ['Theory Spend', 'Actual Spend', 'Progress Spendage'],
+            labels: ['Supposed Spend', 'Actual Spend', 'Progress Spent'],
             datasets: [{
-                label: 'Spendage Progress',
-                data: [theorySpend, actualSpend, progressSpend],
-                backgroundColor: ['#4CAF50', '#FF6384', '#36A2EB'],
-                borderWidth: 1
+                label: 'Spend Progress',
+                data: [supposedSpend, moneySaved, progressSpent],
+                backgroundColor: ['blue', 'green', 'red']
             }]
-        },
-        options: {
-            scales: {
-                y: {
-                    beginAtZero: true
-                }
-            }
+        }
+    });
+
+    // Savings Progress Chart
+    let saveChart = document.getElementById('save-progress-chart').getContext('2d');
+    new Chart(saveChart, {
+        type: 'bar',
+        data: {
+            labels: ['Supposed Save', 'Actual Saved'],
+            datasets: [{
+                label: 'Savings Progress',
+                data: [supposedSave, moneySaved],
+                backgroundColor: ['blue', 'green']
+            }]
         }
     });
 }
@@ -63,10 +61,10 @@ function updateSpendageChart(theorySpend, actualSpend, progressSpend) {
 // Save data for future use
 function saveData() {
     savedData = {
-        theorySpend: theorySpend,
-        theorySave: theorySave,
-        actualSpend: actualSpend,
-        actualSave: actualSave
+        supposedSave: supposedSave,
+        supposedSpend: supposedSpend,
+        moneySaved: moneySaved,
+        progressSpent: progressSpent
     };
     localStorage.setItem('savedData', JSON.stringify(savedData));
     alert('Data saved successfully!');
@@ -78,8 +76,8 @@ function loadData() {
     if (data) {
         savedData = JSON.parse(data);
         document.getElementById('saved-data').innerText = 
-            `Last Month's Data:\nTheory Spend: $${savedData.theorySpend.toFixed(2)}, Theory Save: $${savedData.theorySave.toFixed(2)}, 
-            Actual Spend: $${savedData.actualSpend.toFixed(2)}, Actual Save: $${savedData.actualSave.toFixed(2)}`;
+            `Last Month's Data:\nSupposed Save: $${savedData.supposedSave.toFixed(2)}, Supposed Spend: $${savedData.supposedSpend.toFixed(2)}, 
+             Money Saved: $${savedData.moneySaved.toFixed(2)}, Progress Spent: $${savedData.progressSpent.toFixed(2)}`;
     } else {
         alert('No data found.');
     }
